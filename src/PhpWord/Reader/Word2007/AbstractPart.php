@@ -39,6 +39,7 @@ abstract class AbstractPart
      * @const int
      */
     const READ_VALUE = 'attributeValue';            // Read attribute value
+    const READ_VALUE_OR_DEFAULT = 'attributeValueOrDefault'; // Read attribute value or use specified default
     const READ_EQUAL = 'attributeEquals';           // Read `true` when attribute value equals specified value
     const READ_TRUE = 'attributeTrue';              // Read `true` when element exists
     const READ_FALSE = 'attributeFalse';            // Read `false` when element exists
@@ -540,7 +541,7 @@ abstract class AbstractPart
             'valign'        => array(self::READ_VALUE, 'w:vAlign'),
             'textDirection' => array(self::READ_VALUE, 'w:textDirection'),
             'gridSpan'      => array(self::READ_VALUE, 'w:gridSpan'),
-            'vMerge'        => array(self::READ_VALUE, 'w:vMerge'),
+            'vMerge'        => array(self::READ_VALUE_OR_DEFAULT, 'w:vMerge', null, 'continue'),
             'bgColor'       => array(self::READ_VALUE, 'w:shd', 'w:fill'),
         );
 
@@ -656,6 +657,8 @@ abstract class AbstractPart
             $style = !$this->isOn($attributeValue);
         } elseif (self::READ_EQUAL == $method) {
             $style = $attributeValue == $expected;
+        } elseif (self::READ_VALUE_OR_DEFAULT == $method) {
+            $style = $attributeValue ?: $expected;
         }
 
         return $style;
