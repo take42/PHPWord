@@ -50,6 +50,14 @@ class Table extends AbstractElement
                 $rowCellCount = count($rowCells);
                 for ($j = 0; $j < $rowCellCount; $j++) {
                     $cellStyle = $rowCells[$j]->getStyle();
+                    $styles = [];
+                    if (
+                      $cellStyle->getShading()
+                      && $bgcolor = $cellStyle->getShading()->getFill()
+                    ) {
+                      $styles[] = 'background-color: #' . $bgcolor;
+                    }
+
                     $cellColSpan = $cellStyle->getGridSpan();
                     $cellRowSpan = 1;
                     $cellVMerge = $cellStyle->getVMerge();
@@ -73,7 +81,8 @@ class Table extends AbstractElement
                         $cellTag = $tblHeader ? 'th' : 'td';
                         $cellColSpanAttr = (is_numeric($cellColSpan) && ($cellColSpan > 1) ? " colspan=\"{$cellColSpan}\"" : '');
                         $cellRowSpanAttr = ($cellRowSpan > 1 ? " rowspan=\"{$cellRowSpan}\"" : '');
-                        $content .= "<{$cellTag}{$cellColSpanAttr}{$cellRowSpanAttr}>" . PHP_EOL;
+                        $stylesAttr = $styles ? " style=\"" . join('', $styles) . "\"" : '';
+                        $content .= "<{$cellTag}{$cellColSpanAttr}{$cellRowSpanAttr}{$stylesAttr}>" . PHP_EOL;
                         $writer = new Container($this->parentWriter, $rowCells[$j]);
                         $content .= $writer->write();
                         if ($cellRowSpan > 1) {
