@@ -105,6 +105,7 @@ abstract class AbstractPart
      */
     protected function readParagraph(XMLReader $xmlReader, \DOMElement $domNode, $parent, $docPart = 'document')
     {
+
         // Paragraph style
         $paragraphStyle = null;
         $headingDepth = null;
@@ -428,6 +429,7 @@ abstract class AbstractPart
             'superScript'         => array(self::READ_EQUAL, 'w:vertAlign', 'w:val', 'superscript'),
             'subScript'           => array(self::READ_EQUAL, 'w:vertAlign', 'w:val', 'subscript'),
             'fgColor'             => array(self::READ_VALUE, 'w:highlight'),
+            'shading'             => array(self::READ_VALUE, 'w:shd', 'w:fill'),
             'rtl'                 => array(self::READ_TRUE,  'w:rtl'),
             'lang'                => array(self::READ_VALUE, 'w:lang'),
             'position'            => array(self::READ_VALUE, 'w:position'),
@@ -625,6 +627,10 @@ abstract class AbstractPart
                 // Use w:val as default if no attribute assigned
                 $attribute = ($attribute === null) ? 'w:val' : $attribute;
                 $attributeValue = $xmlReader->getAttribute($attribute, $node);
+
+                // if ($styleProp == 'shading') {
+                //     print "shading - {$attribute} - $attributeValue\n";
+                // }
 
                 $styleValue = $this->readStyleDef($method, $attributeValue, $expected);
                 if ($styleValue !== null) {
