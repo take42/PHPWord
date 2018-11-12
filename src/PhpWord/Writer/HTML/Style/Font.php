@@ -51,6 +51,11 @@ class Font extends AbstractStyle
         $css['color'] = $this->getValueIf($color !== null, "#{$color}");
         $css['background'] = $this->getValueIf($fgColor != '', $fgColor);
         $css['font-weight'] = $this->getValueIf($style->isBold(), 'bold');
+        
+        if ($style->getStyleName() == 'Strong') {
+            $css['font-weight'] = 'bold';
+        }
+
         $css['font-style'] = $this->getValueIf($style->isItalic(), 'italic');
         $css['vertical-align'] = '';
         $css['vertical-align'] .= $this->getValueIf($style->isSuperScript(), 'super');

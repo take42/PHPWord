@@ -106,11 +106,16 @@ abstract class AbstractPart
     protected function readParagraph(XMLReader $xmlReader, \DOMElement $domNode, $parent, $docPart = 'document')
     {
 
+        // print "READ PARAGRAPH\n\n\n";
+
         // Paragraph style
         $paragraphStyle = null;
         $headingDepth = null;
         if ($xmlReader->elementExists('w:pPr', $domNode)) {
             $paragraphStyle = $this->readParagraphStyle($xmlReader, $domNode);
+            // print "YESSSS!!!!\n\n";
+            // var_export($paragraphStyle);
+            // print "---\n\n\n";
             $headingDepth = $this->getHeadingDepth($paragraphStyle);
         }
 
@@ -170,6 +175,9 @@ abstract class AbstractPart
                 $parent->addTextBreak(null, $paragraphStyle);
             } else {
                 $nodes = $xmlReader->getElements('*', $domNode);
+                // print "ADD PARAGRAPH TEXT RUN!!!";
+                // var_export($paragraphStyle);
+                // print "---\n\n\n";
                 $paragraph = $parent->addTextRun($paragraphStyle);
                 foreach ($nodes as $node) {
                     $this->readRun($xmlReader, $node, $paragraph, $docPart, $paragraphStyle);
@@ -370,9 +378,11 @@ abstract class AbstractPart
      */
     protected function readParagraphStyle(XMLReader $xmlReader, \DOMElement $domNode)
     {
+        // print "readParagraphStyle\n\n\n";
         if (!$xmlReader->elementExists('w:pPr', $domNode)) {
             return null;
         }
+
 
         $styleNode = $xmlReader->getElement('w:pPr', $domNode);
         $styleDefs = array(
@@ -393,7 +403,17 @@ abstract class AbstractPart
             'suppressAutoHyphens' => array(self::READ_TRUE,  'w:suppressAutoHyphens'),
         );
 
-        return $this->readStyleDefs($xmlReader, $styleNode, $styleDefs);
+        $fontStyle = $this->readFontStyle($xmlReader, $styleNode);
+
+        $defs = $this->readStyleDefs($xmlReader, $styleNode, $styleDefs);
+
+        $output = array_merge($fontStyle ?: [], $defs);
+
+        // print "//// FONT STYLE= ";
+        // var_export($output);
+        // print "\n\n\n-----\n\n\n";
+
+        return $output;
     }
 
     /**
@@ -439,7 +459,13 @@ abstract class AbstractPart
             'position'            => array(self::READ_VALUE, 'w:position'),
         );
 
-        return $this->readStyleDefs($xmlReader, $styleNode, $styleDefs);
+        $defs = $this->readStyleDefs($xmlReader, $styleNode, $styleDefs);
+
+        // print "DEFSSS!!!!!";
+        // var_export($defs);
+
+
+        return $defs;
     }
 
     /**

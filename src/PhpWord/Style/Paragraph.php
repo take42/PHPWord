@@ -809,26 +809,26 @@ class Paragraph extends Border
         return $this;
     }
 
+
     /**
-     * Get bidirectional
+     * Get bold
      *
      * @return bool
      */
-    public function isBidi()
+    public function isBold()
     {
-        return $this->bidi;
+        return $this->bold;
     }
 
     /**
-     * Set bidi
+     * Set bold
      *
-     * @param bool $bidi
-     *            Set to true to write from right to left
+     * @param bool $bold
      * @return self
      */
-    public function setBidi($bidi)
+    public function setBold($bold)
     {
-        $this->bidi = $bidi;
+        $this->bold = $bold;
 
         return $this;
     }

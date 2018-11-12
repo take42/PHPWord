@@ -34,6 +34,9 @@ class Paragraph extends AbstractStyle
     public function write()
     {
         $style = $this->getStyle();
+        // print "P STYLE!!!";
+        // var_export($style);
+        // print "\n\n\n-----\n\n\n\n";
         if (!$style instanceof \PhpOffice\PhpWord\Style\Paragraph) {
             return '';
         }
@@ -79,6 +82,13 @@ class Paragraph extends AbstractStyle
             $css['margin-top'] = '0';
             $css['margin-bottom'] = '0';
         }
+
+        if ($style->isBold() || $style->getStyleName() == 'Strong') {
+            $css['font-weight'] = 'bold';
+        }
+
+        // print "STYLE!!!";
+        // var_export($style);
 
         return $this->assembleCss($css);
     }
