@@ -619,7 +619,7 @@ class Font extends AbstractStyle
      */
     public function getFgColor()
     {
-        return $this->fgColor;
+        return $this->fgColor ?: '#' . $this->shading;
     }
 
     /**
