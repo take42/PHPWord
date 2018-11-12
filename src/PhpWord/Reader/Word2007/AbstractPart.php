@@ -192,9 +192,13 @@ abstract class AbstractPart
             }
 
             $headingMatches = array();
-            preg_match('/Heading(\d)/', $paragraphStyle['styleName'], $headingMatches);
+            // 42: ALLOW SPACE IN STYLE NAME
+            preg_match('/Heading\s*(\d)/', $paragraphStyle['styleName'], $headingMatches);
             if (!empty($headingMatches)) {
                 return $headingMatches[1];
+            }
+            elseif ($paragraphStyle['styleName'] == 'Heading') {
+                return 1; // 42: HARD CODED, "Heading" == "Heading 1" IN OUR DOCS!
             }
         }
 
@@ -638,6 +642,8 @@ abstract class AbstractPart
                 }
             }
         }
+
+        // var_export($styles); // DEBUG
 
         return $styles;
     }
